@@ -14,10 +14,10 @@
         "driver": "ws2812"
     },
     "matrix_pins": {
-        "cols": ["GP28", "GP21", "GP6", "GP7", "GP8"],
+        "cols": ["GP8", "GP7", "GP6", "GP21", "GP28"],
         "rows": ["GP26", "GP5", "GP4", "GP9"]
     },
-    "diode_direction": "ROW2COL",
+    "diode_direction": "COL2ROW",
     "split": {
         "enabled": true,
         "serial": {

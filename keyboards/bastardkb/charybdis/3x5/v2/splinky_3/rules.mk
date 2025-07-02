@@ -1,5 +1,9 @@
 AUDIO_SUPPORTED = no        # Audio is not supported
-
 POINTING_DEVICE_DRIVER = pmw3360
-
 SERIAL_DRIVER = vendor
+#AUTO_SHIFT_ENABLE = yes
+CAPS_WORD_ENABLE = yes
+COMBO_ENABLE = yes
+TAP_DANCE_ENABLE = yes
+#CONSOLE_ENABLE = yes
+#VIA_ENABLE = yes
