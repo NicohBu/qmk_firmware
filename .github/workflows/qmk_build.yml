@@ -2,45 +2,33 @@ name: QMK Build
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [ "main", "master" ]
   pull_request:
-    branches:
-      - main
-      - master
+    branches: [ "main", "master" ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
+    # Asume que tu repositorio es un 'fork' del firmware de QMK
+    # Si tu keymap está en un 'user space' separado, los pasos cambiarían un poco
+    
     steps:
-      - name: Checkout repository
+      - name: Checkout QMK Firmware (con submódulos)
         uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          submodules: 'recursive'
 
-      - name: Install QMK dependencies
+      - name: Setup QMK
+        uses: qmk/setup-qmk@v1
+
+      - name: Compile Firmware
         run: |
-          python -m pip install --upgrade pip
-          pip install qmk
+          qmk compile -j$(nproc) -kb bastardkb/charybdis/3x5/v2/splinky_3 -km default
 
-      - name: Set up QMK
-        run: |
-          qmk setup -y
-          qmk doctor
-
-      - name: Compile firmware
-        run: |
-          qmk compile -kb bastardkb/charybdis/3x5/v2/splinky_3 -km default
-
-      - name: Upload compiled firmware
+      - name: Upload compiled firmware as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: compiled_firmware
-          path: |
-            *.uf2
-
+          name: charybdis-firmware
+          path: ./*.uf2
