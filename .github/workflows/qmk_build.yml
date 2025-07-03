@@ -11,24 +11,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
-    # Asume que tu repositorio es un 'fork' del firmware de QMK
-    # Si tu keymap está en un 'user space' separado, los pasos cambiarían un poco
-    
+    env:
+      QMK_HOME: qmk_firmware
+
     steps:
-      - name: Checkout QMK Firmware (con submódulos)
+      - name: Checkout QMK Firmware
         uses: actions/checkout@v4
         with:
+          repository: qmk/qmk_firmware
           submodules: 'recursive'
+          path: ${{ env.QMK_HOME }}
 
-      - name: Setup QMK
-        uses: qmk/setup-qmk@v1
+      - name: Setup QMK Environment
+        uses: qmk/qmk_firmware/setup@main
+        with:
+          qmk_home: ${{ env.QMK_HOME }}
 
       - name: Compile Firmware
+        working-directory: ${{ env.QMK_HOME }}
         run: |
           qmk compile -j$(nproc) -kb bastardkb/charybdis/3x5/v2/splinky_3 -km default
 
-      - name: Upload compiled firmware as artifact
+      - name: Upload compiled firmware
         uses: actions/upload-artifact@v4
         with:
           name: charybdis-firmware
-          path: ./*.uf2
+          path: ${{ env.QMK_HOME }}/*.uf2
