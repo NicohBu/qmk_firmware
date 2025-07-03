@@ -2,38 +2,30 @@ name: QMK Build
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches:
+      - main
+      - master
   pull_request:
-    branches: [ "main", "master" ]
-  workflow_dispatch:
+    branches:
+      - main
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    env:
-      QMK_HOME: qmk_firmware
 
     steps:
-      - name: Checkout QMK Firmware
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          repository: qmk/qmk_firmware
-          submodules: 'recursive'
-          path: ${{ env.QMK_HOME }}
 
-      - name: Setup QMK Environment
-        uses: qmk/qmk_firmware/setup@main
-        with:
-          qmk_home: ${{ env.QMK_HOME }}
-
-      - name: Compile Firmware
-        working-directory: ${{ env.QMK_HOME }}
+      - name: Compile firmware using Docker
         run: |
-          qmk compile -j$(nproc) -kb bastardkb/charybdis/3x5/v2/splinky_3 -km default
+          ./util/docker_build.sh bastardkb/charybdis/3x5/v2/splinky_3:default
 
       - name: Upload compiled firmware
         uses: actions/upload-artifact@v4
         with:
-          name: charybdis-firmware
-          path: ${{ env.QMK_HOME }}/*.uf2
+          name: charybdis3x5+3_firmware
+          path: |
+            *.uf2
+
