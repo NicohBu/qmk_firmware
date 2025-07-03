@@ -36,3 +36,11 @@ jobs:
       - name: Compile firmware
         run: |
           qmk compile -kb bastardkb/charybdis/3x5/v2/splinky_3 -km default
+
+      - name: Upload compiled firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled_firmware
+          path: |
+            *.uf2
+
