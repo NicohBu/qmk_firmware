@@ -58,7 +58,8 @@
      SLS,      // Tap: / | Hold: "\" 
      LPR,      // Tap: ( | Hold: {
      RPR,      // Tap: ) | Hold: }
-     CAL,      // Tap: * | Hold: CALC
+     CALC,     // Tap: * | Hold: CALC
+     MAIL,     // Tap: m | Hold: MAIL
      ARR,      // Tap: q | Hold: @
      DPT,      // Tap: . | Hold: :
      
@@ -207,7 +208,8 @@ static bool caps_word_was_active = false;
      [SLS] = ACTION_TAP_DANCE_TAP_HOLD(S(KC_7), RALT(KC_MINS)),
      [LPR] = ACTION_TAP_DANCE_TAP_HOLD(S(KC_8), KC_QUOT),
      [RPR] = ACTION_TAP_DANCE_TAP_HOLD(S(KC_9), KC_NUHS),
-     [CAL] = ACTION_TAP_DANCE_TAP_HOLD(KC_PSLS, KC_CALC),
+     [CALC] = ACTION_TAP_DANCE_TAP_HOLD(KC_PSLS, KC_CALC),
+     [MAIL] = ACTION_TAP_DANCE_TAP_HOLD(KC_PSLS, KC_MAIL),
      [ARR] = ACTION_TAP_DANCE_TAP_HOLD(KC_Q, RALT(KC_Q)),
      [DPT] = ACTION_TAP_DANCE_TAP_HOLD(KC_PDOT, S(KC_DOT)),
 
@@ -232,9 +234,10 @@ static bool caps_word_was_active = false;
      switch (keycode) {
          case TD(QST):         case TD(EXC):         case TD(COM):         case TD(MAQ):         case TD(MEQ):         
          case TD(GRV):         case TD(APP):         case TD(SLS):         case TD(LPR):         case TD(RPR):         
-         case TD(CAL):         case TD(UND):         case TD(RED):         case TD(CUT):         case TD(COP):         
+         case TD(CALC):        case TD(UND):         case TD(RED):         case TD(CUT):         case TD(COP):         
          case TD(PAS):         case TD(SEA):         case TD(TAB):         case TD(TDA):         case TD(TDE):
          case TD(TDI):         case TD(TDO):         case TD(TDU):         case TD(ARR):         case TD(DPT):
+         case TD(MAIL):
              action = &tap_dance_actions[QK_TAP_DANCE_GET_INDEX(keycode)];
              if (!record->event.pressed && action->state.count && !action->state.finished) {
                  tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)action->user_data;
@@ -385,7 +388,7 @@ static bool caps_word_was_active = false;
 
  const uint16_t PROGMEM lr_caps_combo[]  = {RSF_TAB, KC_LSFT, COMBO_END};
  const uint16_t PROGMEM tg_symnum_combo[]= {TD(ARR), TD(TDO), COMBO_END};
- const uint16_t PROGMEM tg_alpha_combo[] = {KC_PMNS, TD(CAL), COMBO_END};
+ const uint16_t PROGMEM tg_alpha_combo[] = {KC_PMNS, TD(CALC), COMBO_END};
  const uint16_t PROGMEM RBOOT_combo[]    = {KC_VOLD, KC_MPRV, COMBO_END};
  const uint16_t PROGMEM LBOOT_combo[]    = {KC_F11, KC_F12, COMBO_END};
 
@@ -419,11 +422,11 @@ static bool caps_word_was_active = false;
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  [ALPHA] = LAYOUT(
   // ╭─────────────────────────────────────────────╮ ╭───────────────────────────────────────────────╮
-      TD(RED),  KC_W,   TD(SEA),  KC_P,    KC_G,         KC_J,   KC_L,  TD(TDI),  TD(TDU),  TD(ARR),
+      TD(RED),  KC_W,   TD(SEA),  KC_P,    KC_G,         KC_J,   KC_L,   TD(TDI),  TD(TDU),  TD(ARR),
   // ├─────────────────────────────────────────────┤ ├───────────────────────────────────────────────┤
-       KC_H,   TD(TDA),  HRM_R,  TD(TAB), TD(PAS),       KC_S,   HRM_N, TD(TDE),  HRM_D,    TD(TDO),
+       KC_H,   TD(TDA),  HRM_R,  TD(TAB), TD(PAS),       KC_S,   HRM_N,  TD(TDE),  HRM_D,    TD(TDO),
   // ├─────────────────────────────────────────────┤ ├─────────────────────────── ───────────────────┤
-      TD(UND), TD(CUT),  KC_K,   TD(COP),   KC_B,      KC_SCLN,  KC_M,  TD(MEQ),  TD(MAQ),  KC_SLSH,
+      TD(UND), TD(CUT),  KC_K,   TD(COP),   KC_B,      KC_SCLN, TD(MAIL),TD(MEQ),  TD(MAQ),  KC_SLSH,
   // ╰─────────────────────────────────────────────┤ ├───────────────────────────────────────────────╯
                        CTL_DEL,  RSF_TAB,  FN_ENT,     SYM_NUM,  KC_LSFT,  FN_DEL
   //                 ╰─────────────────────────────╯ ╰─────────────────────────────╯
@@ -431,11 +434,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
  [QWERTY] = LAYOUT(
   // ╭─────────────────────────────────────────────╮ ╭────────────────────────────────────────────────╮
-        KC_Q,    KC_W,  TD(TDE),   KC_R,   KC_T,        KC_Y,  TD(TDU),  TD(TDI),  TD(TDO),    KC_P,
+        KC_Q,    KC_W,  TD(TDE),   KC_R,   KC_T,        KC_Y,  TD(TDU),   TD(TDI),  TD(TDO),    KC_P,
   // ├─────────────────────────────────────────────┤ ├────────────────────────────────────────────────┤
        TD(TDA),  KC_S,    KC_D,   KC_F,    KC_G,        KC_H,   HRM_J,     KC_K,     HRM_L,   KC_SCLN,
   // ├─────────────────────────────────────────────┤ ├────────────────────────────────────────────────┤
-        KC_Z,    KC_X,    KC_C,   KC_V,    KC_B,        KC_N,    KC_M,   TD(MEQ),   TD(MAQ),  KC_SLSH,
+        KC_Z,    KC_X,    KC_C,   KC_V,    KC_B,        KC_N,  TD(MAIL),  TD(MEQ),  TD(MAQ),  KC_SLSH,
   // ╰─────────────────────────────────────────────┤ ├────────────────────────────────────────────────╯
                          _______, _______, _______,    _______, _______, _______
   //                   ╰───────────────────────────╯ ╰───────────────────────────╯
@@ -445,7 +448,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────╮
         TD(EXC), TD(COM), S(KC_3), S(KC_4), S(KC_5),      KC_PPLS,  KC_7,    KC_8,    KC_9,   KC_PMNS,   
   // ├────────────────────────────────────────────────┤ ├──────────────────────────────────────────────┤
-        S(KC_6), TD(SLS), TD(LPR), TD(RPR), S(KC_0),      KC_PAST,  KC_4,    KC_5,    KC_6,   TD(CAL),   
+        S(KC_6), TD(SLS), TD(LPR), TD(RPR), S(KC_0),      KC_PAST,  KC_4,    KC_5,    KC_6,   TD(CALC),   
   // ├────────────────────────────────────────────────┤ ├──────────────────────────────────────────────┤
         TD(GRV), TD(APP),  LBRC,    RBRC,   TD(QST),        KC_0,   KC_1,    KC_2,    KC_3,   TD(DPT),    
   // ╰────────────────────────────────────────────────┤ ├──────────────────────────────────────────────╯
